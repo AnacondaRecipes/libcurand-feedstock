@@ -21,9 +21,9 @@ source:
   sha256: c4db1ed0595fcdba3c4da0f5605ca4c3f4340b6be833d94765994e239c775a32  # [win]
 
 build:
-  number: 1
+  number: 0
   binary_relocation: false
-  skip: true  # [osx or (linux and s390x)]
+  skip: true  # [osx]
 
 requirements:
   build:
@@ -35,8 +35,6 @@ outputs:
     build:
       # Keep binary relocation disabled in the output package, because the generic binary_relocation doesn't work here
       binary_relocation: false  # [linux]
-      ignore_run_exports_from:
-        - {{ compiler("cxx")}}
       # Fix for "runpaths ['$ORIGIN'] found in libcurand.so" error
       runpath_whitelist:
          - '$ORIGIN'  # [linux]
@@ -90,8 +88,6 @@ outputs:
         - {{ pin_subpackage("libcurand", max_pin="x") }}
       # Keep binary relocation disabled in the output package, because the generic binary_relocation doesn't work here
       binary_relocation: false  # [linux]
-      ignore_run_exports_from:
-        - {{ compiler("cxx")}}
       # Fix for "runpaths ['$ORIGIN'] found in libcurand.so" error
       runpath_whitelist:
          - '$ORIGIN'  # [linux]
