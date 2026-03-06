@@ -26,17 +26,25 @@ source:
   sha256: d0411f0b8c07e90d0fb6e01bfa7a54c9cb80f2ddf67e4ded2d96a50e19aadad6  # [win]
 
 build:
-  number: 1
+  number: 0
   binary_relocation: false
-  skip: true  # [osx or ppc64le]
+  skip: true  # [osx]
 
 requirements:
   build:
     - cf-nvidia-tools 1.*  # [linux]
-    - patchelf <0.18.0                      # [linux]
+    - patchelf <0.18.0     # [linux]
 
 outputs:
   - name: libcurand
+    build:
+      binary_relocation: false
+      missing_dso_whitelist:
+        # Needed for the use of conda-build's --error-overlinking command-line argument
+        - '*libgcc_s.so*'  # [linux]
+      overlinking_ignore_patterns:
+        # Workaround for LIEF's 'not a valid TAG' error
+        - '*libcurand*.so*'  # [linux and aarch64]
     files:
       # Include SONAME and full name libraries, but not the linker name. That
       # goes in the -dev package.
@@ -71,10 +79,12 @@ outputs:
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_file: LICENSE
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: cuRAND native runtime libraries
       description: |
         cuRAND native runtime libraries
       doc_url: https://docs.nvidia.com/cuda/curand/
+      dev_url: https://docs.nvidia.com/cuda/curand/
 
   - name: libcurand-dev
     build:
@@ -115,10 +125,12 @@ outputs:
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_file: LICENSE
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: cuRAND native runtime libraries
       description: |
         cuRAND native runtime libraries
       doc_url: https://docs.nvidia.com/cuda/curand/
+      dev_url: https://docs.nvidia.com/cuda/curand/
 
   - name: libcurand-static
     build:
@@ -144,20 +156,24 @@ outputs:
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_file: LICENSE
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: cuRAND native runtime libraries
       description: |
         cuRAND native runtime libraries
       doc_url: https://docs.nvidia.com/cuda/curand/
+      dev_url: https://docs.nvidia.com/cuda/curand/
 
 about:
   home: https://developer.nvidia.com/curand
   license_file: LICENSE
   license: LicenseRef-NVIDIA-End-User-License-Agreement
   license_url: https://docs.nvidia.com/cuda/eula/index.html
+  license_family: Other
   summary: cuRAND native runtime libraries
   description: |
     cuRAND native runtime libraries
   doc_url: https://docs.nvidia.com/cuda/curand/
+  dev_url: https://docs.nvidia.com/cuda/curand/
 
 extra:
   recipe-maintainers:
