@@ -3,3 +3,7 @@ upstream_sources:
   - webpage:
       url: https://api.anaconda.org/package/conda-forge/libcurand
       regex: '"version":\s*"([^"]+)"'
+    packages:
+      - libcurand
+      - libcurand-dev
+      - libcurand-static
