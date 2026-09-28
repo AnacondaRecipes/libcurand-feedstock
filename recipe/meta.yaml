@@ -39,11 +39,8 @@ outputs:
     build:
       # Keep binary relocation disabled in the output package, because the generic binary_relocation doesn't work here
       binary_relocation: false  # [linux]
-      # Fix for "runpaths ['$ORIGIN'] found in libcurand.so" error
-      runpath_whitelist:
-         - '$ORIGIN'  # [linux]
-      missing_dso_whitelist:
-        # Needed for the use of conda-build's --error-overlinking command-line argument
+      missing_dso_whitelist:  # [linux]
+        # Needed because of the use of conda-build's --error-overlinking command-line argument
         - '*libgcc_s.so.*'  # [linux]
     files:
       # Include SONAME and full name libraries, but not the linker name. That
@@ -96,8 +93,8 @@ outputs:
       # Fix for "runpaths ['$ORIGIN'] found in libcurand.so" error
       runpath_whitelist:
          - '$ORIGIN'  # [linux]
-      missing_dso_whitelist:
-        # Needed for the use of conda-build's --error-overlinking command-line argument
+      missing_dso_whitelist:  # [linux]
+        # Needed because of the use of conda-build's --error-overlinking command-line argument
         - '*libgcc_s.so.*'  # [linux]
     files:
       - lib/libcurand.so                            # [linux]
@@ -144,11 +141,8 @@ outputs:
   - name: libcurand-static
     build:
       skip: true  # [not linux]
-      # Fix for "runpaths ['$ORIGIN'] found in libcurand.so" error
-      runpath_whitelist:
-         - '$ORIGIN'  # [linux]
-      missing_dso_whitelist:
-        # Needed for the use of conda-build's --error-overlinking command-line argument
+      missing_dso_whitelist:  # [linux]
+        # Needed because of the use of conda-build's --error-overlinking command-line argument
         - '*libgcc_s.so.*'  # [linux]
     files:
       - targets/{{ target_name }}/lib/libcurand_static.a
