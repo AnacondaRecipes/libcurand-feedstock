@@ -39,9 +39,6 @@ outputs:
     build:
       # Keep binary relocation disabled in the output package, because the generic binary_relocation doesn't work here
       binary_relocation: false  # [linux]
-      missing_dso_whitelist:  # [linux]
-        # Needed because of the use of conda-build's --error-overlinking command-line argument
-        - '*libgcc_s.so.*'  # [linux]
     files:
       # Include SONAME and full name libraries, but not the linker name. That
       # goes in the -dev package.
@@ -56,8 +53,16 @@ outputs:
         - {{ stdlib("c") }}
       host:
         - cuda-version {{ cuda_version }}
+        # cuda-cudart is now required
+        - cuda-cudart
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
+        # cuda-cudart is now required.
+        # Both of these are required. cuda_cudart_<target_platform> silences the DSO
+        # checker and contains the actual libcudart.so.13 library, while cuda-cudart
+        # creates the symlinks to the libcudart.so.13 library.
+        - {{ pin_compatible("cuda-cudart", max_pin="x.x") }}
+        - {{ pin_compatible("cuda-cudart_" ~ target_platform, max_pin="x.x") }}
       run_constrained:
         - arm-variant * {{ arm_variant_type }}  # [aarch64]
     test:
